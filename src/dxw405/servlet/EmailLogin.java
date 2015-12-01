@@ -1,4 +1,4 @@
-package dxw405;
+package dxw405.servlet;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
