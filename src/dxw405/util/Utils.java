@@ -201,5 +201,23 @@ public class Utils
 		return FILESIZE_FORMAT.format(size / Math.pow(1000, digitGroups)) + " " + FILESIZE_UNITS[digitGroups];
 	}
 
+	/**
+	 * Converts a String into its Integer representation
+	 *
+	 * @param s The string to convert
+	 * @return Its integer representation, or null if invalid
+	 */
+	public static Integer stringToInt(String s)
+	{
+		try
+		{
+			return Integer.parseInt(s);
+
+		} catch (NumberFormatException e)
+		{
+			return null;
+		}
+	}
+
 
 }
