@@ -22,7 +22,6 @@ public class Mailbox extends Observable implements Closeable
 	private Store store;
 	private Folder inbox;
 	private Session session;
-	private boolean connected;
 
 	private List<Email> emails;
 	private String emailAddress;
@@ -32,7 +31,6 @@ public class Mailbox extends Observable implements Closeable
 	public Mailbox(int maxEmails)
 	{
 		this.maxEmails = maxEmails;
-		connected = false;
 		emails = new ArrayList<>();
 	}
 
@@ -104,7 +102,7 @@ public class Mailbox extends Observable implements Closeable
 	 * @param user     The email address
 	 * @param password The password   @return If the operation was successful
 	 */
-	public boolean connect(String host, int port, String outHost, String outPort, String user, String password)
+	public boolean connect(String host, int port, String outHost, int outPort, String user, String password)
 	{
 		// connection properties
 		Properties connProps = System.getProperties();
@@ -130,7 +128,6 @@ public class Mailbox extends Observable implements Closeable
 			Logging.info("Attempting to connect to " + host + ":" + port + " with email'" + user + "'");
 			store = session.getStore("imaps");
 			store.connect(host, port, user, password);
-			connected = true;
 			Logging.info("Successfully connected to mailbox");
 
 			inbox = store.getFolder("inbox");
@@ -145,6 +142,19 @@ public class Mailbox extends Observable implements Closeable
 			close();
 			return false;
 		}
+	}
+
+	/**
+	 * Attempts to connect with the given details
+	 *
+	 * @param details The details to connect with
+	 * @return If the connection succeeded
+	 */
+	public boolean connect(LoginDetails details)
+	{
+		return connect(details.getIncomingHost(), details.getIncomingPort(),
+				details.getOutgoingHost(), details.getOutgoingPort(),
+				details.getUser(), details.getPass());
 	}
 
 	@Override
@@ -166,7 +176,10 @@ public class Mailbox extends Observable implements Closeable
 		}
 	}
 
-	public boolean isConnected() {return connected;}
+	public boolean isConnected()
+	{
+		return store.isConnected();
+	}
 
 	public List<Email> getEmails()
 	{
@@ -359,7 +372,10 @@ public class Mailbox extends Observable implements Closeable
 		}
 	}
 
-	protected void addEmail(Email email) {emails.add(email);}
+	protected void addEmail(Email email)
+	{
+		emails.add(email);
+	}
 
 	private String concatEmails(Address[] addresses)
 	{
