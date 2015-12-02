@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-@WebServlet("/EmailLogin")
+@WebServlet("/login")
 public class EmailLogin extends HttpServlet
 {
 
@@ -29,7 +29,7 @@ public class EmailLogin extends HttpServlet
 		if (!login.isValid())
 		{
 			writer.println("Failure!");
-			req.getRequestDispatcher("/login.jsp").include(req, resp);
+			req.getRequestDispatcher("/").include(req, resp);
 			return;
 		}
 

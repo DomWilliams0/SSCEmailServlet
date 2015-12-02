@@ -32,7 +32,7 @@
 %>
 
 <h2>Login</h2>
-<form action="EmailLogin" method="post">
+<form action="login" method="post">
     Username: <%= createField("username", request) %>
     <br>
     Password: <%= createField("password", true, "") %>
