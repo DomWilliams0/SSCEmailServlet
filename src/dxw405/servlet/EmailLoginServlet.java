@@ -15,6 +15,11 @@ import java.io.PrintWriter;
 @WebServlet("/login")
 public class EmailLoginServlet extends HttpServlet
 {
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
+	{
+		resp.sendRedirect("/");
+	}
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
@@ -49,9 +54,9 @@ public class EmailLoginServlet extends HttpServlet
 
 		// assign mailbox to session
 		HttpSession session = req.getSession(true);
-		session.setAttribute("mailbox", mailbox);
+		session.setAttribute(MailboxServlet.MAILBOX_ATTRIBUTE, mailbox);
 
 		// send to mailbox
-		resp.sendRedirect("/mailbox");
+		resp.sendRedirect(MailboxServlet.MAILBOX_URL);
 	}
 }

@@ -1,3 +1,4 @@
+<%@ page import="java.util.Enumeration" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -50,6 +51,13 @@
 
     <input type="submit">
 </form>
+
+<%-- Error messages --%>
+<%
+    Object errorMessage = request.getAttribute("error-message");
+    if (errorMessage != null)
+        out.print(String.format("<script>alert(\"%s\"); window.location=\"/\"</script>", errorMessage));
+%>
 
 </body>
 </html>
