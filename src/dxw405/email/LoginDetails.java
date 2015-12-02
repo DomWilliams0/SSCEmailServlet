@@ -64,4 +64,17 @@ public class LoginDetails
 	{
 		return outgoingPort;
 	}
+
+	@Override
+	public String toString()
+	{
+		return "LoginDetails{" +
+				"user='" + user + '\'' +
+				", pass='" + pass + '\'' +
+				", incomingHost='" + incomingHost + '\'' +
+				", outgoingHost='" + outgoingHost + '\'' +
+				", incomingPort=" + incomingPort +
+				", outgoingPort=" + outgoingPort +
+				'}';
+	}
 }

@@ -29,10 +29,21 @@ public class EmailLogin extends HttpServlet
 		if (!login.isValid())
 		{
 			writer.println("Failure!");
-			req.getRequestDispatcher("/login.html").include(req, resp);
+			req.getRequestDispatcher("/login.jsp").include(req, resp);
 			return;
 		}
 
 		writer.println("Success!");
+	}
+
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
+	{
+		LoginDetails login = new LoginDetails(req.getParameter("username"), req.getParameter("password"),
+				req.getParameter("incoming-server"), req.getParameter("outgoing-server"),
+				req.getParameter("incoming-port"), req.getParameter("outgoing-port"));
+
+		resp.getWriter().println(login);
+
 	}
 }
