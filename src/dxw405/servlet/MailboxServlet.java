@@ -4,6 +4,7 @@ import dxw405.email.Mailbox;
 import dxw405.email.PreparedEmail;
 import dxw405.email.Recipient;
 
+import javax.mail.MessagingException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -74,7 +75,14 @@ public class MailboxServlet extends HttpServlet
 			return;
 		}
 
-
+		// attempt to send email
+		try
+		{
+			mailbox.sendEmail(email);
+		} catch (MessagingException e)
+		{
+			error("Could not send email: " + e.getMessage(), false, req, resp);
+		}
 	}
 
 	/**
