@@ -1,4 +1,3 @@
-<%@ page import="java.util.Enumeration" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
