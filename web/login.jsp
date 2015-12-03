@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
+
+    <jsp:include page="bootstrap.html"/>
+
 </head>
 <body>
 

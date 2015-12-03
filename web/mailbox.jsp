@@ -3,6 +3,7 @@
 <head>
     <title>Send Mail - <%= request.getAttribute("email-address") %>
     </title>
+    <jsp:include page="bootstrap.html"/>
 </head>
 <body>
 
