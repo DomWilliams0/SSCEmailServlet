@@ -55,8 +55,6 @@
 </head>
 <body>
 
-<jsp:include page="popup.jsp"/>
-
 <%!
     /**
      * Creates an input field with the given input value
@@ -99,6 +97,8 @@
 %>
 
 <div class="container">
+
+    <jsp:include page="popup.jsp"/>
 
     <form class="form-group form-signin" action="login" method="post">
         <h2 class="form-signin-heading">Login</h2>
