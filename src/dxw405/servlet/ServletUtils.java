@@ -55,7 +55,7 @@ public class ServletUtils
 
 			try
 			{
-				Method doGet = servlet.getClass().getMethod("doGet", HttpServletRequest.class, HttpServletResponse.class);
+				Method doGet = servlet.getClass().getDeclaredMethod("doGet", HttpServletRequest.class, HttpServletResponse.class);
 				doGet.setAccessible(true);
 				doGet.invoke(servlet, req, resp);
 				return;

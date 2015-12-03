@@ -78,7 +78,12 @@ public class MailboxServlet extends HttpServlet
 		} catch (MessagingException e)
 		{
 			ServletUtils.showError("Could not send email: " + e.getMessage(), false, req, resp, this);
+			return;
 		}
+
+		// success
+		ServletUtils.showPopup("Email sent", "Your email was sent", false, req, resp, this);
+
 	}
 
 	private boolean hasSession(HttpSession session, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
