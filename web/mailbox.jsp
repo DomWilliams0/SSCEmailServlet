@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<jsp:include page="error.jsp"/>
+<jsp:include page="popup.jsp"/>
 
 <form action="mailbox" method="post" id="send-mail">
 

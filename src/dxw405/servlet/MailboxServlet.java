@@ -13,13 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-
 @WebServlet("/mailbox")
 public class MailboxServlet extends HttpServlet
 {
-	public static final String MAILBOX_ATTRIBUTE = "mailbox";
-	public static final String MAILBOX_URL = "/mailbox";
-
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
 	{
@@ -27,7 +23,7 @@ public class MailboxServlet extends HttpServlet
 		if (!hasSession(session, req, resp))
 			return;
 
-		Mailbox mailbox = (Mailbox) session.getAttribute(MAILBOX_ATTRIBUTE);
+		Mailbox mailbox = (Mailbox) session.getAttribute(ServletUtils.MAILBOX_ATTRIBUTE);
 		req.setAttribute("email-address", mailbox.getEmailAddress());
 
 		// logout
@@ -36,23 +32,12 @@ public class MailboxServlet extends HttpServlet
 			mailbox.close();
 			session.invalidate();
 
-			// todo popup
-			error("Logged out", true, req, resp);
+			ServletUtils.showPopup("Logged out", "You were successfully logged out. Come again!", true, req, resp, this);
 			return;
 		}
 
 		// send to send page
 		req.getRequestDispatcher("mailbox.jsp").include(req, resp);
-	}
-
-	private boolean hasSession(HttpSession session, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
-	{
-		if (session == null || session.getAttribute(MAILBOX_ATTRIBUTE) == null)
-		{
-			error("You must login first", true, req, resp);
-			return false;
-		}
-		return true;
 	}
 
 	@Override
@@ -74,15 +59,15 @@ public class MailboxServlet extends HttpServlet
 		if (!email.validate())
 		{
 			String errorMessage = "Could not send email!<br> -" + String.join("<br> -", email.getErrors());
-			error(errorMessage, false, req, resp);
+			ServletUtils.showError(errorMessage, false, req, resp, this);
 			return;
 		}
 
 		// check mailbox is still valid
-		Mailbox mailbox = (Mailbox) session.getAttribute(MAILBOX_ATTRIBUTE);
+		Mailbox mailbox = (Mailbox) session.getAttribute(ServletUtils.MAILBOX_ATTRIBUTE);
 		if (!mailbox.isConnected())
 		{
-			error("Connection to mailbox lost", false, req, resp);
+			ServletUtils.showError("Connection to mailbox lost", false, req, resp, this);
 			return;
 		}
 
@@ -92,24 +77,17 @@ public class MailboxServlet extends HttpServlet
 			mailbox.sendEmail(email);
 		} catch (MessagingException e)
 		{
-			error("Could not send email: " + e.getMessage(), false, req, resp);
+			ServletUtils.showError("Could not send email: " + e.getMessage(), false, req, resp, this);
 		}
 	}
 
-	/**
-	 * Shows an error message with the given message after redirecting to the given page
-	 *
-	 * @param message      The error message
-	 * @param returnToRoot True to return to the root page, otherwise to the current page
-	 * @param req          The request
-	 * @param resp         The response
-	 */
-	private void error(String message, boolean returnToRoot, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
+	private boolean hasSession(HttpSession session, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
 	{
-		req.setAttribute("error-message", message);
-		if (returnToRoot)
-			req.getRequestDispatcher("/").forward(req, resp);
-		else
-			doGet(req, resp);
+		if (session == null || session.getAttribute(ServletUtils.MAILBOX_ATTRIBUTE) == null)
+		{
+			ServletUtils.showError("You must login first", true, req, resp, this);
+			return false;
+		}
+		return true;
 	}
 }

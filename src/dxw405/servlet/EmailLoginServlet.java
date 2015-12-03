@@ -31,8 +31,7 @@ public class EmailLoginServlet extends HttpServlet
 		// invalid: include fail popup
 		if (!login.isValid())
 		{
-			req.setAttribute("error-message", "Invalid input");
-			req.getRequestDispatcher("/").include(req, resp);
+			ServletUtils.showError("Invalid input", true, req, resp, this);
 			return;
 		}
 
@@ -42,17 +41,15 @@ public class EmailLoginServlet extends HttpServlet
 		Mailbox mailbox = new Mailbox(0);
 		if (!mailbox.connect(login))
 		{
-			// todo show failure popup and go back to login
-			req.setAttribute("error-message", "Could not connect: bad details?");
-			req.getRequestDispatcher("/").include(req, resp);
+			ServletUtils.showError("Could not connect: bad login?", true, req, resp, this);
 			return;
 		}
 
 		// assign mailbox to session
 		HttpSession session = req.getSession(true);
-		session.setAttribute(MailboxServlet.MAILBOX_ATTRIBUTE, mailbox);
+		session.setAttribute(ServletUtils.MAILBOX_ATTRIBUTE, mailbox);
 
 		// send to mailbox
-		resp.sendRedirect(MailboxServlet.MAILBOX_URL);
+		resp.sendRedirect(ServletUtils.MAILBOX_URL);
 	}
 }
