@@ -13,7 +13,6 @@ import javax.mail.search.OrTerm;
 import javax.mail.search.SearchTerm;
 import javax.mail.search.SubjectTerm;
 import java.io.Closeable;
-import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
@@ -241,37 +240,15 @@ public class Mailbox extends Observable implements Closeable
 		multipart.addBodyPart(content);
 
 		// recipients
-		for (Field field : Field.values())
+		for (Recipient recipient : Recipient.values())
 		{
-			if (!field.isAddress())
-				continue;
-
-			List<Address> addressList = email.getRecipients(field.getRecipientType());
+			List<Address> addressList = email.getRecipients(recipient);
 			Address[] addresses = new Address[addressList.size()];
 			for (int i = 0, addressListSize = addressList.size(); i < addressListSize; i++)
 				addresses[i] = addressList.get(i);
 
-			message.setRecipients(field.getRecipientType(), addresses);
+			message.setRecipients(recipient.getType(), addresses);
 		}
-
-		// attachments
-		List<File> attachments = email.getAttachments();
-		if (!attachments.isEmpty())
-		{
-			for (File attachment : attachments)
-			{
-				try
-				{
-					MimeBodyPart attachmentBodyPart = new MimeBodyPart();
-					attachmentBodyPart.attachFile(attachment);
-					multipart.addBodyPart(attachmentBodyPart);
-				} catch (IOException e)
-				{
-					throw new MessagingException("Could not attach file '" + attachment.getName() + "': " + e.getMessage());
-				}
-			}
-		}
-
 		message.setContent(multipart);
 
 		Transport.send(message);

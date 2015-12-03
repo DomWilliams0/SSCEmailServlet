@@ -3,10 +3,8 @@ package dxw405.email;
 import dxw405.util.Logging;
 
 import javax.mail.Address;
-import javax.mail.Message;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,26 +15,24 @@ import java.util.Map;
  */
 public class PreparedEmail
 {
-	private Map<Message.RecipientType, List<Address>> recipients;
+	private Map<Recipient, List<Address>> recipients;
 	private String subject, body;
 	private List<String> errors;
-	private List<File> attachments;
 
 	public PreparedEmail()
 	{
 		this(new HashMap<>(), "", "");
 	}
 
-	public PreparedEmail(Map<Message.RecipientType, List<Address>> recipients, String subject, String body)
+	public PreparedEmail(Map<Recipient, List<Address>> recipients, String subject, String body)
 	{
 		this.recipients = recipients;
 		this.subject = subject;
 		this.body = body;
 		this.errors = new ArrayList<>();
-		this.attachments = new ArrayList<>();
 	}
 
-	public List<Address> getRecipients(Message.RecipientType type)
+	public List<Address> getRecipients(Recipient type)
 	{
 		List<Address> addresses = recipients.get(type);
 		if (addresses == null)
@@ -72,12 +68,12 @@ public class PreparedEmail
 		return errors;
 	}
 
-	public void setRecipients(Field field, String addresses)
+	public void setRecipients(Recipient recipient, String addresses)
 	{
-		recipients.put(field.getRecipientType(), parseEmails(field, addresses, field.isMandatory()));
+		recipients.put(recipient, parseEmails(addresses));
 	}
 
-	private List<Address> parseEmails(Field field, String input, boolean mandatory)
+	private List<Address> parseEmails(String input)
 	{
 		List<Address> addresses = new ArrayList<>();
 
@@ -89,11 +85,7 @@ public class PreparedEmail
 				split.add(s);
 
 		if (split.isEmpty())
-		{
-			if (mandatory)
-				errors.add("At least 1 '" + field + "' recipient is needed");
 			return addresses;
-		}
 
 		for (String s : split)
 		{
@@ -103,7 +95,9 @@ public class PreparedEmail
 
 			try
 			{
-				addresses.add(new InternetAddress(email));
+				InternetAddress e = new InternetAddress(email);
+				e.validate();
+				addresses.add(e);
 			} catch (AddressException e)
 			{
 				Logging.warning("Invalid address", e);
@@ -114,9 +108,23 @@ public class PreparedEmail
 		return addresses;
 	}
 
-	public boolean hasErrors()
+	/**
+	 * @return If this email is valid
+	 */
+	public boolean validate()
 	{
-		return !errors.isEmpty();
+		// at least 1 recipient
+		if (recipients.values().stream().map(List::size).reduce(0, Integer::sum) == 0)
+			errors.add("At least 1 recipient must be given");
+
+		// replace nulls
+		if (subject == null)
+			subject = "";
+		if (body == null)
+			body = null;
+
+		// no errors
+		return errors.isEmpty();
 	}
 
 	@Override
@@ -127,15 +135,5 @@ public class PreparedEmail
 				", subject='" + subject + '\'' +
 				", body='" + body + '\'' +
 				'}';
-	}
-
-	public List<File> getAttachments()
-	{
-		return attachments;
-	}
-
-	public void setAttachments(List<File> attachments)
-	{
-		this.attachments = attachments;
 	}
 }

@@ -6,6 +6,8 @@
 </head>
 <body>
 
+<jsp:include page="error.jsp"/>
+
 <form action="mailbox" method="post" id="send-mail">
 
     To: <input type="text" name="to" placeholder="example@example.com">
