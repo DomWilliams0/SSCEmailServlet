@@ -1,5 +1,7 @@
 package dxw405.servlet;
 
+import dxw405.email.Mailbox;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -28,7 +30,11 @@ public class MailboxServlet extends HttpServlet
 			return;
 		}
 
-		resp.getWriter().println("Mail!");
+		Mailbox mailbox = (Mailbox) session.getAttribute(MAILBOX_ATTRIBUTE);
+		req.setAttribute("email-address", mailbox.getEmailAddress());
+
+		// send to send page
+		req.getRequestDispatcher("mailbox.jsp").forward(req, resp);
 	}
 
 	@Override

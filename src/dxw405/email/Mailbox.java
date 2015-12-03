@@ -186,6 +186,11 @@ public class Mailbox extends Observable implements Closeable
 		return emails;
 	}
 
+	public String getEmailAddress()
+	{
+		return emailAddress;
+	}
+
 	public void setAsRead(Email email)
 	{
 		setAsRead(email, true);
