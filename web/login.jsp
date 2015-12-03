@@ -6,6 +6,8 @@
 </head>
 <body>
 
+<jsp:include page="error.jsp"/>
+
 <%!
     /**
      * Creates an input field with the given input value
@@ -62,13 +64,6 @@
 
     <input type="submit" value="Login">
 </form>
-
-<%-- Error messages --%>
-<%
-    Object errorMessage = request.getAttribute("error-message");
-    if (errorMessage != null)
-        out.print(String.format("<script>alert(\"%s\"); window.location=\"/\"</script>", errorMessage));
-%>
 
 </body>
 </html>

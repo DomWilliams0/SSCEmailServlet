@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 @WebServlet("/login")
 public class EmailLoginServlet extends HttpServlet
@@ -29,13 +28,10 @@ public class EmailLoginServlet extends HttpServlet
 				req.getParameter("incoming-server"), req.getParameter("outgoing-server"),
 				req.getParameter("incoming-port"), req.getParameter("outgoing-port"));
 
-		PrintWriter writer = resp.getWriter();
-		resp.setContentType("text/html");
-
 		// invalid: include fail popup
 		if (!login.isValid())
 		{
-			writer.println("Failure!");
+			req.setAttribute("error-message", "Invalid input");
 			req.getRequestDispatcher("/").include(req, resp);
 			return;
 		}
@@ -47,7 +43,7 @@ public class EmailLoginServlet extends HttpServlet
 		if (!mailbox.connect(login))
 		{
 			// todo show failure popup and go back to login
-			writer.println("FAILED TO CONNECT");
+			req.setAttribute("error-message", "Could not connect: bad details?");
 			req.getRequestDispatcher("/").include(req, resp);
 			return;
 		}
