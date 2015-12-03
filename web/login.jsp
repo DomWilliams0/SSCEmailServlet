@@ -49,7 +49,7 @@
     Outgoing Port: <%= createPort("outgoing-port", 587, request) %>
     <br>
 
-    <input type="submit">
+    <input type="submit" value="Login">
 </form>
 
 <%-- Error messages --%>
