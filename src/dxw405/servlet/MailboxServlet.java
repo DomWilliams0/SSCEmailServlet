@@ -30,6 +30,17 @@ public class MailboxServlet extends HttpServlet
 		Mailbox mailbox = (Mailbox) session.getAttribute(MAILBOX_ATTRIBUTE);
 		req.setAttribute("email-address", mailbox.getEmailAddress());
 
+		// logout
+		if (req.getParameter("logout") != null)
+		{
+			mailbox.close();
+			session.invalidate();
+
+			// todo popup
+			error("Logged out", true, req, resp);
+			return;
+		}
+
 		// send to send page
 		req.getRequestDispatcher("mailbox.jsp").include(req, resp);
 	}

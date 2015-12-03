@@ -27,6 +27,9 @@
     <input type="submit" form="send-mail" value="Send">
 </form>
 
+<form action="mailbox" method="get" id="logout">
+    <button name="logout" value="yespls" type="submit">Logout</button>
+</form>
 
 </body>
 </html>
