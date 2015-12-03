@@ -37,8 +37,7 @@ public class MailboxServlet extends HttpServlet
 	{
 		if (session == null || session.getAttribute(MAILBOX_ATTRIBUTE) == null)
 		{
-			req.setAttribute("error-message", "You must login first");
-			req.getRequestDispatcher("/").forward(req, resp);
+			error("You must login first", true, req, resp);
 			return false;
 		}
 		return true;
@@ -60,16 +59,38 @@ public class MailboxServlet extends HttpServlet
 		email.setBody(req.getParameter("body"));
 
 		// invalid email
-		if (!email.validate()) {
+		if (!email.validate())
+		{
 			String errorMessage = "Could not send email!<br> -" + String.join("<br> -", email.getErrors());
-
-			req.setAttribute("error-message", errorMessage);
-			doGet(req, resp);
+			error(errorMessage, false, req, resp);
 			return;
 		}
 
-		resp.getWriter().println("sending email " + email);
-
+		// check mailbox is still valid
 		Mailbox mailbox = (Mailbox) session.getAttribute(MAILBOX_ATTRIBUTE);
+		if (!mailbox.isConnected())
+		{
+			error("Connection to mailbox lost", false, req, resp);
+			return;
+		}
+
+
+	}
+
+	/**
+	 * Shows an error message with the given message after redirecting to the given page
+	 *
+	 * @param message      The error message
+	 * @param returnToRoot True to return to the root page, otherwise to the current page
+	 * @param req          The request
+	 * @param resp         The response
+	 */
+	private void error(String message, boolean returnToRoot, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
+	{
+		req.setAttribute("error-message", message);
+		if (returnToRoot)
+			req.getRequestDispatcher("/").forward(req, resp);
+		else
+			doGet(req, resp);
 	}
 }
