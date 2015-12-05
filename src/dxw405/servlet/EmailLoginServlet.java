@@ -49,6 +49,9 @@ public class EmailLoginServlet extends HttpServlet
 		HttpSession session = req.getSession(true);
 		session.setAttribute(ServletUtils.MAILBOX_ATTRIBUTE, mailbox);
 
+		// session timeout
+		session.setMaxInactiveInterval(5 * 60);
+
 		// send to mailbox
 		resp.sendRedirect(ServletUtils.MAILBOX_URL);
 	}
