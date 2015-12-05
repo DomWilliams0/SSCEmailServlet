@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 
 public class ServletUtils
 {
@@ -30,25 +31,41 @@ public class ServletUtils
 	 */
 	public static void showError(String message, boolean returnToRoot, HttpServletRequest req, HttpServletResponse resp, HttpServlet servlet)
 			throws ServletException, IOException
-	{
-		showPopup("Error", message, returnToRoot, req, resp, servlet);
-	}
+	{showError(message, null, returnToRoot, req, resp, servlet);}
 
 	/**
-	 * Shows a popup message with the given header after redirecting to the given page
-	 *
-	 * @param header       The popup header
-	 * @param message      The popup message
+	 * Shows an error message with the given header after redirecting to the given page
+	 *  @param message      The error message
+	 * @param list An optional list of strings to display after the message
 	 * @param returnToRoot True to return to the root page, otherwise to the current page
 	 * @param req          The request
 	 * @param resp         The response
 	 * @param servlet      The servlet
 	 */
-	public static void showPopup(String header, String message, boolean returnToRoot, HttpServletRequest req, HttpServletResponse resp, HttpServlet servlet)
+	public static void showError(String message, List<String> list, boolean returnToRoot, HttpServletRequest req, HttpServletResponse resp, HttpServlet servlet)
+			throws ServletException, IOException
+	{
+		showPopup("Error", message, list, returnToRoot, req, resp, servlet);
+	}
+
+	/**
+	 * Shows a popup message with the given header after redirecting to the given page
+	 * @param header       The popup header
+	 * @param message      The popup message
+	 * @param list          An optional list of strings to display after the message
+	 * @param returnToRoot True to return to the root page, otherwise to the current page
+	 * @param req          The request
+	 * @param resp         The response
+	 * @param servlet      The servlet
+	 */
+	public static void showPopup(String header, String message, List<String> list, boolean returnToRoot, HttpServletRequest req, HttpServletResponse resp, HttpServlet servlet)
 			throws ServletException, IOException
 	{
 		req.setAttribute("popup-header", header);
 		req.setAttribute("popup-message", message);
+
+		if (list != null)
+			req.setAttribute("popup-list", list);
 
 		if (!returnToRoot)
 		{
@@ -67,5 +84,19 @@ public class ServletUtils
 
 		req.getRequestDispatcher("/").forward(req, resp);
 	}
+
+	/**
+	 * Shows a popup message with the given header after redirecting to the given page
+	 *
+	 * @param header       The popup header
+	 * @param message      The popup message
+	 * @param returnToRoot True to return to the root page, otherwise to the current page
+	 * @param req          The request
+	 * @param resp         The response
+	 * @param servlet      The servlet
+	 */
+	public static void showPopup(String header, String message, boolean returnToRoot, HttpServletRequest req, HttpServletResponse resp, HttpServlet servlet)
+			throws ServletException, IOException
+	{showPopup(header, message, null, returnToRoot, req, resp, servlet);}
 
 }

@@ -58,8 +58,7 @@ public class MailboxServlet extends HttpServlet
 		// invalid email
 		if (!email.validate())
 		{
-			String errorMessage = "Could not send email!<br> -" + String.join("<br> -", email.getErrors());
-			ServletUtils.showError(errorMessage, false, req, resp, this);
+			ServletUtils.showError("Could not send email", email.getErrors(), false, req, resp, this);
 			return;
 		}
 
