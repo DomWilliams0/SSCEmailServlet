@@ -24,7 +24,7 @@ public class EmailLoginServlet extends HttpServlet
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
 	{
 		// collect details
-		LoginDetails login = new LoginDetails(req.getParameter("username"), req.getParameter("password"),
+		LoginDetails login = new LoginDetails(req.getParameter("email"), req.getParameter("password"),
 				req.getParameter("incoming-server"), req.getParameter("outgoing-server"),
 				req.getParameter("incoming-port"), req.getParameter("outgoing-port"));
 

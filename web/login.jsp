@@ -102,7 +102,7 @@
 
     <form class="form-group form-signin" action="login" method="post">
         <h2 class="form-signin-heading">Login</h2>
-        <%= createField("username", "Email address", request) %>
+        <%= createField("email", "Email address", request) %>
         <%= createField("password", true, "", "Password", false) %>
 
         <a class="btn btn-default fill form-control" data-toggle="collapse" href="#serverSettings">
