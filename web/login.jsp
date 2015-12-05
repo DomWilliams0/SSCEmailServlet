@@ -67,9 +67,9 @@
      */
     String createField(String parameter, boolean password, String initValue, String placeholder, boolean addLabel)
     {
-        String extra = password ? "type=\"password\"" : "";
+        String extra = password ? "type=\"password\" " : "";
         String label = !addLabel ? "" : "<label for=\"" + parameter + "\" class=\"control-label\">" + placeholder + "</label>\n";
-        return label + String.format("<input class=\"form-control\" value=\"%s\" name=\"%s\" placeholder=\"%s\" id=\"%s\", %srequired>",
+        return label + String.format("<input class=\"form-control\" value=\"%s\" name=\"%s\" placeholder=\"%s\" id=\"%s\" %srequired>",
                 initValue, parameter, placeholder, parameter, extra);
     }
 
