@@ -109,12 +109,14 @@
             Server Settings
         </a>
 
-        <div class="collapse well" id="serverSettings">
+        <div class="collapse" id="serverSettings">
+            <div class="well">
             <%= createField("incoming-server", "IMAP server", "imap.gmail.com", request) %>
             <%= createField("incoming-port", "IMAP port", Integer.toString(993), request) %>
 
             <%= createField("outgoing-server", "SMTP server", "smtp.gmail.com", request) %>
             <%= createField("outgoing-port", "SMTP port", Integer.toString(587), request) %>
+            </div>
         </div>
 
         <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
