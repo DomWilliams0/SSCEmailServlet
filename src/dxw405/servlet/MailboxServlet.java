@@ -26,7 +26,7 @@ public class MailboxServlet extends HttpServlet
 		// timeout
 		if (ServletUtils.checkTimeout(session))
 		{
-			ServletUtils.showPopup("Timed out!", "Your session timed out, login again", true, req, resp, this);
+			ServletUtils.showPopup("Timed out!", "Your session timed out, please login again", true, req, resp, this);
 			return;
 		}
 
