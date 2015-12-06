@@ -6,6 +6,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -15,6 +16,9 @@ public class ServletUtils
 {
 	public static final String MAILBOX_ATTRIBUTE = "mailbox";
 	public static final String MAILBOX_URL = "/mailbox";
+
+	public static final long TIMEOUT_SECONDS = 5;
+	public static final String TIMEOUT_ATTRIBUTE = "last-activity";
 
 	private ServletUtils()
 	{
@@ -99,4 +103,27 @@ public class ServletUtils
 			throws ServletException, IOException
 	{showPopup(header, message, null, returnToRoot, req, resp, servlet);}
 
+	/**
+	 * Updates the last activity time of the session, and checks if it has expired
+	 *
+	 * @param session The session
+	 * @return True if the session has timed out, otherwise false
+	 */
+	public static boolean checkTimeout(HttpSession session)
+	{
+		Object attr = session.getAttribute(TIMEOUT_ATTRIBUTE);
+
+		// checking
+		if (attr != null)
+		{
+			long diff = System.currentTimeMillis() - (Long) attr;
+			if (diff >= TIMEOUT_SECONDS * 1000)
+				return true;
+
+		}
+
+		// update
+		session.setAttribute(TIMEOUT_ATTRIBUTE, System.currentTimeMillis());
+		return false;
+	}
 }

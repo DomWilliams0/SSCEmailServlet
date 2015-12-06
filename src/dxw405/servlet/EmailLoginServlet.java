@@ -50,7 +50,7 @@ public class EmailLoginServlet extends HttpServlet
 		session.setAttribute(ServletUtils.MAILBOX_ATTRIBUTE, mailbox);
 
 		// session timeout
-		session.setMaxInactiveInterval(5 * 60);
+		ServletUtils.checkTimeout(session);
 
 		// send to mailbox
 		resp.sendRedirect(ServletUtils.MAILBOX_URL);

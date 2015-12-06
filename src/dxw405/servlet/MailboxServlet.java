@@ -23,6 +23,14 @@ public class MailboxServlet extends HttpServlet
 		if (!hasSession(session, req, resp))
 			return;
 
+		// timeout
+		if (ServletUtils.checkTimeout(session))
+		{
+			ServletUtils.showPopup("Timed out!", "Your session timed out, login again", true, req, resp, this);
+			return;
+		}
+
+
 		Mailbox mailbox = (Mailbox) session.getAttribute(ServletUtils.MAILBOX_ATTRIBUTE);
 		req.setAttribute("email-address", mailbox.getEmailAddress());
 
