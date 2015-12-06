@@ -70,6 +70,8 @@ public class ServletUtils
 
 		if (list != null)
 			req.setAttribute("popup-list", list);
+		else
+			req.removeAttribute("popup-list");
 
 		if (!returnToRoot)
 		{
