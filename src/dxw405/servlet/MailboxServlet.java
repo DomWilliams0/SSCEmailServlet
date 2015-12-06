@@ -93,6 +93,14 @@ public class MailboxServlet extends HttpServlet
 
 	}
 
+	/**
+	 * Checks if the given session has a mailbox attributed to it
+	 *
+	 * @param session The session
+	 * @param req     The request, to be forwarded to showError on fail
+	 * @param resp    The response, to be forwarded to showError on fail
+	 * @return True if the session has a valid mailbox, otherwise false
+	 */
 	private boolean hasSession(HttpSession session, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
 	{
 		if (session == null || session.getAttribute(ServletUtils.MAILBOX_ATTRIBUTE) == null)
